@@ -90,6 +90,13 @@ def plot_history(history, output_column_name):
 def test_model(model, label, testing_dataset, testing_labels, output_column_name):
   loss, mae, mse = model.evaluate(testing_dataset, testing_labels, verbose=2)
   
+  # LIMIT_RECORDS = 5
+  LIMIT_RECORDS = None
+
+  if LIMIT_RECORDS:
+    testing_dataset = testing_dataset[:LIMIT_RECORDS]
+    testing_labels  = testing_labels[:LIMIT_RECORDS]
+
   count = testing_labels.shape[0]
 
   label = f'{label} ({count} records)'
@@ -98,21 +105,19 @@ def test_model(model, label, testing_dataset, testing_labels, output_column_name
 
   test_predictions = model.predict(testing_dataset).flatten()
 
-  for (truth, pred) in zip(testing_labels, test_predictions):
-    print(truth, pred)
+  print('actual', 'pred')
+  for (actual, pred) in zip(testing_labels, test_predictions):
+    print(actual, pred)
 
-
-  plt.scatter(testing_labels, test_predictions)
+  plt.scatter(testing_labels, test_predictions, edgecolors='g')
+  plt.legend([ f'Predicted Y {output_column_name}'])
   plt.title(label)
-  plt.xlabel(f'True Values {output_column_name}')
+  plt.xlabel(f'Actual {output_column_name}')
   plt.ylabel(f'Predictions {output_column_name}')
   plt.axis('equal')
   plt.axis('square')
-  plt.xlim([0,plt.xlim()[1]])
-  plt.ylim([0,plt.ylim()[1]])
   _ = plt.plot([-100, 100], [-100, 100])
   plt.show()
-
 
   error = test_predictions - testing_labels
   plt.title(label)
