@@ -24,7 +24,7 @@ EPOCHS = 500
 VALIDATION_SPLIT_PERCENT = 0.2
 
 if not os.path.exists(TRAIN_TEST_DATA_CSV):
-      print(f'ERROR: File does not exist: {TRAIN_TEST_DATA_CSV}')
+  print(f'ERROR: File does not exist: {TRAIN_TEST_DATA_CSV}')
   print(f'Please run the following to genrate data:\n\tpython generate-data.py {data_type}')
   sys.exit()
 
