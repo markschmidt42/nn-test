@@ -90,8 +90,8 @@ def plot_history(history, output_column_name):
 def test_model(model, label, testing_dataset, testing_labels, output_column_name):
   loss, mae, mse = model.evaluate(testing_dataset, testing_labels, verbose=2)
   
-  # LIMIT_RECORDS = 5
   LIMIT_RECORDS = None
+  # LIMIT_RECORDS = 5
 
   if LIMIT_RECORDS:
     testing_dataset = testing_dataset[:LIMIT_RECORDS]
