@@ -1,6 +1,7 @@
 import sys
 import csv
 import random
+import argparse
 
 RECORDS = 1000
 MIN_VALUE = -10
@@ -45,7 +46,28 @@ def create_file(filename, records = 1000, columns = 10, min_value=-1, max_value=
 
 # end function --------------------------------------------------------------
 
-function_type = sys.argv[1] if len(sys.argv) == 2 else OUTPUT_TYPE
-print(function_type)
-create_file('train_test.csv', records=RECORDS, min_value=MIN_VALUE, max_value=MAX_VALUE, output_function_type=function_type)
-create_file('predict.csv', records=int(RECORDS/10), min_value=MIN_VALUE, max_value=MAX_VALUE, output_function_type=function_type)
+def main():
+  create_file('train_test.csv', records=RECORDS, min_value=MIN_VALUE, max_value=MAX_VALUE, output_function_type=OUTPUT_TYPE)
+  create_file('predict.csv', records=int(RECORDS/10), min_value=MIN_VALUE, max_value=MAX_VALUE, output_function_type=OUTPUT_TYPE)
+# end function --------------------------------------------------------------
+
+def parsargs():
+  global RECORDS, OUTPUT_TYPE
+  parser = argparse.ArgumentParser(description='Generate some fake data for Neural Networks.')
+
+  parser.add_argument('--records', dest='records', default=RECORDS, type=int,
+                      help=f'Number of records to generate (default: {RECORDS}).')
+
+  parser.add_argument('--type', dest='type', default=OUTPUT_TYPE,
+                      help=f'Which output calculation should we use? simple, simple2, simple3, complex (default: {OUTPUT_TYPE})')
+
+
+  args = parser.parse_args()
+  RECORDS = args.records
+  OUTPUT_TYPE = args.type
+# end function --------------------------------------------------------------
+      
+
+if __name__ == '__main__':
+  parsargs()
+  main()
