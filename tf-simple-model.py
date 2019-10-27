@@ -84,6 +84,6 @@ pymark.plot_history(history, output_column_name)
 pymark.test_model(model, 'test_dataset', test_dataset, test_labels, output_column_name)
 
 # let's try it on some brand new data it has never seen
-predict_dataset, predict_labels, output_column_name = pymark.get_data(TRAIN_TEST_DATA_CSV, split_percent=0)
+predict_dataset, predict_labels, output_column_name = pymark.get_data(PREDICT_DATA_CSV, split_percent=0)
 
 pymark.test_model(model, 'predict_dataset', predict_dataset, predict_labels, output_column_name)
