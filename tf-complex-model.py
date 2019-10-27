@@ -29,20 +29,24 @@ if not os.path.exists(TRAIN_TEST_DATA_CSV):
   sys.exit()
 
 
-train_dataset, train_labels, test_dataset, test_labels, output_column_name = pymark.get_data(TRAIN_TEST_DATA_CSV)
+train_dataset, train_labels, test_dataset, test_labels, output_column_name = pymark.get_data(TRAIN_TEST_DATA_CSV, normalize=True)
+
+print(train_dataset.tail())
 input_size = len(train_dataset.keys())
 
 def build_model():
   model = keras.Sequential([
-    layers.Dense(200, activation='relu', kernel_initializer='random_normal', input_shape=[input_size]),
+    layers.Dense(100, activation='tanh', kernel_initializer='random_normal', input_shape=[input_size]),
     # layers.Dropout(0.2),
-    layers.Dense(200, activation='relu'),
-    layers.Dense(200, activation='relu'),
+    layers.Dense(100, activation='tanh'),
+    layers.Dense(100, activation='tanh'),
+    # layers.Dense(100, activation='tanh'),
     # layers.Dropout(0.2),
     layers.Dense(1)
   ])
 
-  optimizer = tf.keras.optimizers.Adam(0.001)
+  optimizer = tf.keras.optimizers.RMSprop(0.001)
+  # optimizer = tf.keras.optimizers.Adam(0.001)
 
   model.compile(loss='mse',
     optimizer=optimizer,
@@ -58,7 +62,7 @@ model.summary()
 # Display training progress by printing a single dot for each completed epoch
 class PrintDot(keras.callbacks.Callback):
   def on_epoch_end(self, epoch, logs):
-    if epoch % 100 == 0: print('')
+    if epoch % 50 == 0: print('')
     print(f'{epoch},', end='')
 
 # The patience parameter is the amount of epochs to check for improvement
@@ -72,8 +76,9 @@ history = model.fit(
   train_labels, 
   epochs=EPOCHS, 
   validation_split=VALIDATION_SPLIT_PERCENT, 
-  verbose=0, 
-  callbacks=[early_stop, PrintDot()])
+  verbose=0,
+  callbacks=[early_stop, PrintDot()]
+  )
 
 pymark.plot_history(history, output_column_name)
 
@@ -81,6 +86,6 @@ pymark.plot_history(history, output_column_name)
 pymark.test_model(model, 'test_dataset', test_dataset, test_labels, output_column_name)
 
 # let's try it on some brand new data it has never seen
-predict_dataset, predict_labels, output_column_name = pymark.get_data(TRAIN_TEST_DATA_CSV, split_percent=0)
+predict_dataset, predict_labels, output_column_name = pymark.get_data(TRAIN_TEST_DATA_CSV, normalize=True, split_percent=0)
 
 pymark.test_model(model, 'predict_dataset', predict_dataset, predict_labels, output_column_name)

@@ -37,6 +37,12 @@ def get_data(csv_filepath, split_percent=0.8, output_column_name=None, normalize
   else:
     train_dataset = dataset
         
+  # quick pairplot of everything vs everything
+  # sns.pairplot(train_dataset[[output_column_name, "Input0", "Input1", "Input2", "Input3", "Input4"]], diag_kind="kde")
+  # plt.show()
+  # sns.heatmap(train_dataset)
+  # plt.show()
+
   train_stats = train_dataset.describe()
   train_stats.pop(output_column_name)
   train_stats = train_stats.transpose()
@@ -72,7 +78,7 @@ def plot_history(history, output_column_name):
            label='Train Error')
   plt.plot(hist['epoch'], hist['val_mae'],
            label = 'Val Error')
-  plt.ylim([0,5])
+ # plt.ylim([0,5])
   plt.legend()
 
   plt.figure()
@@ -82,7 +88,7 @@ def plot_history(history, output_column_name):
            label='Train Error')
   plt.plot(hist['epoch'], hist['val_mse'],
            label = 'Val Error')
-  plt.ylim([0,20])
+#  plt.ylim([0,20])
   plt.legend()
   plt.show()
 #end def ------------------------------------------------------------------------------------------
@@ -99,15 +105,16 @@ def test_model(model, label, testing_dataset, testing_labels, output_column_name
 
   count = testing_labels.shape[0]
 
-  label = f'{label} ({count} records)'
-
-  print(f'{label} Mean Abs Error: {mae:5.2f} {output_column_name}')
 
   test_predictions = model.predict(testing_dataset).flatten()
 
   print('actual', 'pred')
   for (actual, pred) in zip(testing_labels, test_predictions):
     print(actual, pred)
+
+  label = f'{label} ({count} records)'
+
+  print(f'{label} Mean Abs Error: {mae:5.2f} {output_column_name}')
 
   plt.scatter(testing_labels, test_predictions, edgecolors='g')
   plt.legend([ f'Predicted Y {output_column_name}'])

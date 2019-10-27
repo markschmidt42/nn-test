@@ -17,7 +17,10 @@ def calculate_output(inputs, output_function_type = 'simple'):
   elif output_function_type == 'simple3':
     output = inputs[0] + inputs[1] + inputs[2] - inputs[8] + inputs[6] - inputs[4] + inputs[3] - inputs[5] + inputs[9]
   elif output_function_type == 'complex':
-    output = ((inputs[0] + inputs[1]) * inputs[2] + inputs[3]) / (inputs[4] * inputs[8])
+    output = (inputs[0] + inputs[1]) * (inputs[2] + inputs[3])
+  elif output_function_type == 'complex2':
+    output = ((inputs[0] + inputs[1]) * (inputs[2] + inputs[3])) / (inputs[4] * inputs[8])
+    # print(f'{output} = (({inputs[0]} + {inputs[1]}) * ({inputs[2]} + {inputs[3]})) / ({inputs[4]} * {inputs[8]})')
   else:
     raise Exception(f'invalid output_type: {output_function_type}')
 

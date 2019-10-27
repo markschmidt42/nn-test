@@ -60,7 +60,7 @@ model.summary()
 # Display training progress by printing a single dot for each completed epoch
 class PrintDot(keras.callbacks.Callback):
   def on_epoch_end(self, epoch, logs):
-    if epoch % 100 == 0: print('')
+    if epoch % 50 == 0: print('')
     print(f'{epoch},', end='')
 
 # The patience parameter is the amount of epochs to check for improvement
@@ -75,9 +75,10 @@ history = model.fit(
   epochs=EPOCHS, 
   validation_split=VALIDATION_SPLIT_PERCENT, 
   verbose=0, 
-  callbacks=[early_stop, PrintDot()])
+  callbacks=[early_stop, PrintDot()]
+  )
 
-# pymark.plot_history(history, output_column_name)
+pymark.plot_history(history, output_column_name)
 
 # let's test the model with our test data (from the training set)
 pymark.test_model(model, 'test_dataset', test_dataset, test_labels, output_column_name)
