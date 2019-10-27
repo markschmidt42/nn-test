@@ -93,29 +93,13 @@ def plot_history(history, output_column_name):
   plt.show()
 #end def ------------------------------------------------------------------------------------------
 
-def test_model(model, label, testing_dataset, testing_labels, output_column_name):
-  loss, mae, mse = model.evaluate(testing_dataset, testing_labels, verbose=2)
-  
-  LIMIT_RECORDS = None
-  # LIMIT_RECORDS = 5
-
-  if LIMIT_RECORDS:
-    testing_dataset = testing_dataset[:LIMIT_RECORDS]
-    testing_labels  = testing_labels[:LIMIT_RECORDS]
-
-  count = testing_labels.shape[0]
-
-
-  test_predictions = model.predict(testing_dataset).flatten()
-
+def compare_actual_and_predicted(actual_Y, predicted_Y):
   print('actual', 'pred')
-  for (actual, pred) in zip(testing_labels, test_predictions):
+  for (actual, pred) in zip(actual_Y, predicted_Y):
     print(actual, pred)
+#end def ------------------------------------------------------------------------------------------
 
-  label = f'{label} ({count} records)'
-
-  print(f'{label} Mean Abs Error: {mae:5.2f} {output_column_name}')
-
+def plot_actual_and_predicted(label, testing_labels, test_predictions, output_column_name):
   plt.scatter(testing_labels, test_predictions, edgecolors='g')
   plt.legend([ f'Predicted Y {output_column_name}'])
   plt.title(label)
@@ -132,6 +116,30 @@ def test_model(model, label, testing_dataset, testing_labels, output_column_name
   plt.xlabel(f'Prediction Error {output_column_name}')
   _ = plt.ylabel("Count")
   plt.show()
+#end def ------------------------------------------------------------------------------------------
+
+def test_model(model, label, testing_dataset, testing_labels, output_column_name):
+  loss, mae, mse = model.evaluate(testing_dataset, testing_labels, verbose=2)
+  
+  LIMIT_RECORDS = None
+  # LIMIT_RECORDS = 5
+
+  if LIMIT_RECORDS:
+    testing_dataset = testing_dataset[:LIMIT_RECORDS]
+    testing_labels  = testing_labels[:LIMIT_RECORDS]
+
+  count = testing_labels.shape[0]
+
+  test_predictions = model.predict(testing_dataset).flatten()
+
+  compare_actual_and_predicted(testing_labels, test_predictions)
+
+  label = f'{label} ({count} records)'
+
+  print(f'{label} Mean Abs Error: {mae:5.2f} {output_column_name}')
+
+  plot_actual_and_predicted(label, testing_labels, test_predictions, output_column_name)
+
 #end def ------------------------------------------------------------------------------------------
 
 
