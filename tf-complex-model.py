@@ -36,17 +36,18 @@ input_size = len(train_dataset.keys())
 
 def build_model():
   model = keras.Sequential([
-    layers.Dense(100, activation='tanh', kernel_initializer='random_normal', input_shape=[input_size]),
+    layers.Dense(100, activation='relu', kernel_initializer='random_normal', input_shape=[input_size]),
     # layers.Dropout(0.2),
-    layers.Dense(100, activation='tanh'),
-    layers.Dense(100, activation='tanh'),
+    layers.Dense(100, activation='relu'),
+    layers.Dense(100, activation='relu'),
     # layers.Dense(100, activation='tanh'),
     # layers.Dropout(0.2),
-    layers.Dense(1)
+    layers.Dense(1, activation='linear')
   ])
 
   # optimizer = tf.keras.optimizers.RMSprop(0.001)
-  optimizer = tf.keras.optimizers.Adam(0.0001)
+  # optimizer = tf.keras.optimizers.Adam(0.0001)
+  optimizer = tf.keras.optimizers.SGD(lr=0.001);
 
   model.compile(loss='mse',
     optimizer=optimizer,
